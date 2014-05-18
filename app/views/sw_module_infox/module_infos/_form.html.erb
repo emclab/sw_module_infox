@@ -1,0 +1,35 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+<% else %>
+<%= simple_form_for @module_info do |f| %>
+  <%= f.input :submit_date, :label => t('Submit Date'), :as => :string %>
+  <%= f.input :name, :label => t('Module Name') %>
+  <%= f.input :module_desp, :label => t('Module Desp'), :input_html => { :rows => 3} %>
+  <%= f.input :api_spec, :label => t('API Spec'), :input_html => { :rows => 3} %>
+  <%= f.input :about_init, :label => t('About Initialize'), :input_html => { :rows => 3} %>
+  <%= f.input :about_workflow, :label => t('About Workflow'), :input_html => { :rows => 3} %>
+  <%= f.input :about_model, :label => t('About Model'), :input_html => { :rows => 3} %>
+  <%= f.input :about_controller, :label => t('About Controller'), :input_html => { :rows => 3} %>
+  <%= f.input :about_view, :label => t('About View'), :input_html => { :rows => 3} %>
+  <%= f.input :about_subaction, :label => t('About Subaction'), :input_html => { :rows => 1} %>
+  <%= f.input :about_misc_def, :label => t('About Misc Definition'), :input_html => { :rows => 1} %>
+  <%= f.input :about_onboard_data, :label => t('About onboard_data'), :input_html => { :rows => 3} %>
+  <%= f.input :about_log, :label => t('About Log'), :input_html => { :rows => 1} %>
+  <%= f.input :category_id, :label => t('Module Category'), :collection => Commonx::CommonxHelper.return_misc_definitions('module_category'), :label_method => :name, :value_method => :id,
+              :include_blank => true unless readonly?(@module_info, 'category_id') %>
+  <%= f.input :active, :label => t('Active'), :as => :boolean unless readonly?(@module_info,'active')%>
+  <%= f.input :active_noupdate, :label => t('Active'), :input_html => {:value => (@module_info.active ? t('Yes') : t('No'))} if readonly?(@module_info, 'active') %>
+  
+  <%= f.input :category_name, :label => t('Module Category'), :readonly => true, :input_html => {:value => @module_info.category.name} if @module_info.category_id.present? && readonly?(@module_info, 'category_id') %>
+  <%= f.input :submitted_by_name, :label => t('Submitted By'), :input_html => {:value => @module_info.submitted_by.name}, :readonly => true %>
+  <%= f.input :last_updated_by_name, :label => t('Last Updated By'), :input_html => {:value => @module_info.last_updated_by.name}, :readonly => true %>
+     
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>
+    
+<% end %>
+
+<% end %>
+
+

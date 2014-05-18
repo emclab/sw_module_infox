@@ -1,0 +1,61 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>
+<div class="pagination"><%= will_paginate models %></div>
+
+<table class="table table-striped">
+  <tr>
+    <th>#</th>
+    <th><%= t('Submit Date') %></th>
+    <th><%= t('Module Name') %></th>
+    <th><%= t('Module Desp') %></th>
+    <th><%= t('Module Category') %></th>
+    <th><%= t('Developer') %></th>
+    <th><%= t('Keeper') %></th>
+    <th><%= t('Active') %></th>
+    <th><%= t('Submitted By') %></th>
+    <th><%= t('Last Updated By') %></th>
+    <th></th>
+ 
+  </tr>
+
+<% models.each do |r| %>
+  <tr>
+    <% if has_action_right?('show', params[:controller], r) %>
+        <td><%= link_to r.id, SUBURI + "/authentify/view_handler?index=1&url=#{module_info_path(r)}"  %></td>
+    <% else %>
+        <td><%= r.id %></td>
+    <% end %>
+    <td><%= prt(r, :submit_date).strftime('%Y/%m/%d') %></td>
+  	<td><%= prt(r, :name) %></td> 
+    <td><%= prt(r, :module_desp) %></td> 
+    <td><%= prt(r, 'category.name') if r.category_id.present? %></td>
+    <td><%=  %></td>
+    <td><%=  %></td>
+    <td><%= r.active ? t('Yes') : t('No') %></td>
+    <td><%= prt(r, 'submitted_by.name') %></td>
+    <td><%= prt(r, 'last_updated_by.name') %></td>
+    <td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_module_info_path(r)}" , :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r )  %></td>
+    
+  </tr>
+<% end %>
+</table>
+
+<table class="table table-striped">
+  <tr>
+    <th>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<%= link_to t('New Module Info'), SUBURI + "/authentify/view_handler?index=1&url=#{new_module_info_path()}", :class => BUTTONS_CLS['action'] if has_action_right?('create', params[:controller]) %>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<%= link_to t('Search'), SUBURI + "/authentify/view_handler?index=1&url=#{search_module_infos_path}", :class => BUTTONS_CLS['action'] if has_action_right?('search', params[:controller]) %>
+    </th>
+  </tr>
+</table>
+
+<% end %>
+
+
+

@@ -1,0 +1,105 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>
+<div id="main_body">
+<h4><%= @title %></h4>
+
+<p>
+    <b><%= t('Submit Date') %></b>
+    <%= @module_info.submit_date.strftime('%Y/%m/%/d') if @module_info.submit_date.present? %>
+</p>
+<p>
+  <b><%= t('Module Name') %></b>
+  <%= @module_info.name %>
+</p>
+<p>
+  <b><%= t('Module Desp') %></b>
+  <%= @module_info.module_desp %>
+</p>
+<p>
+  <b><%= t('API Spec') %></b>
+  <%= @module_info.api_spec %>
+</p>
+<p>
+  <b><%= t('About Workflow') %></b>
+  <%= @module_info.about_workflow %>
+</p>
+<p>
+  <b><%= t('About Initialize') %></b>
+  <%= @module_info.about_init %>
+</p>
+<p>
+  <b><%= t('About Subaction') %></b>
+  <%= @module_info.about_subaction %>
+</p>
+<p>
+  <b><%= t('About Misc Definition') %></b>
+  <%= @module_info.about_misc_def %>
+</p>
+<p>
+  <b><%= t('About Onboard Data') %></b>
+  <%= @module_info.about_onboard_data %>
+</p>
+<p>
+  <b><%= t('About Model') %></b>
+  <%= @module_info.about_model %>
+</p>
+<p>
+  <b><%= t('About Controller') %></b>
+  <%= @module_info.about_controller %>
+</p>
+<p>
+  <b><%= t('About View') %></b>
+  <%= @module_info.about_view %>
+</p>
+<p>
+  <b><%= t('About Log') %></b>
+  <%= @module_info.about_log %>
+</p>
+<p>
+  <b><%= t('Category') %></b>
+  <%= @module_info.category.name if @module_info.category_id.present? %>
+</p>
+<p>
+    <b><%= t('Developer') %></b>
+    <%=  %>
+</p>
+<p>
+    <b><%= t('Keeper') %></b>
+    <%=  %>
+</p>
+<p>
+    <b><%= t('Active') %></b>
+    <%= @module_info.active ? t('Yes') : t('No') %>
+</p>
+<p>
+  <b><%= t('Submitted By') %></b>
+  <%= @module_info.submitted_by.name %>
+</p>
+<p>
+  <b><%= t('Last Updated By') %></b>
+  <%= @module_info.last_updated_by.name %>
+</p>
+<p>
+  <b><%= t('LOG：') %></b>
+  <% Commonx::Log.where('resource_id = ? AND resource_name = ?', @module_info.id, params[:controller].sub('/', '_')).order("created_at DESC").each do |t| %>
+    <li><%= t.created_at.strftime("%Y/%m/%d") %>,&nbsp; <%= t.last_updated_by.name %>,&nbsp; <%= t.log %></li>
+  <% end %>
+</p>
+
+<table class="table table-striped">
+  <tr>
+    <th>
+    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<%= link_to t('New Log'), SUBURI + commonx.new_log_path(:resource_id => @module_info.id, :resource_name => params[:controller], :subaction => 'module_info',
+    	     :format => :js), :remote => true, :id => 'new_log_link' , :class => BUTTONS_CLS['action'] if has_action_right?('create_module_info', 'commonx/logs') %>
+    </th>
+  </tr>
+</table>
+
+
+</div>
+
+<% end %>
