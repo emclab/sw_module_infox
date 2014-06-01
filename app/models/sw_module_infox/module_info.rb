@@ -19,8 +19,7 @@ module SwModuleInfox
     belongs_to :category, :class_name => 'Commonx::MiscDefinition'
     
     validates :name, :module_desp, :presence => true
-    validates :name, :uniqueness => {:scope => :version, :case_sensitive => false, :message => 'Duplicate Name!'}, :if => 'version.present?'
-    validates :name, :uniqueness => {:case_sensitive => false, :message => 'Duplicate Name!'}, :if => 'version.blank?'
+    validates :name, :uniqueness => {:scope => :version, :case_sensitive => false, :message => 'Duplicate Name!'} 
     validates :category_id, :numericality => {:only_integer => true, :greater_than => 0}, :if => 'category_id.present?'
     validate :dynamic_validate 
     

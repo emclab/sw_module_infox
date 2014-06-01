@@ -18,7 +18,7 @@ module SwModuleInfox
     end
     
     it "should reject duplicate name" do
-      c0 = FactoryGirl.create(:sw_module_infox_module_info, :name => 'A name')
+      c0 = FactoryGirl.create(:sw_module_infox_module_info, :name => 'A name', :version => nil)
       c = FactoryGirl.build(:sw_module_infox_module_info, :name => 'a name', :version => nil)
       c.should_not be_valid
     end

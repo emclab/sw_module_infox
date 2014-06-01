@@ -7,7 +7,7 @@
 <table class="table table-striped">
   <tr>
     <th>#</th>
-    <th><%= t('Submit Date') %></th>
+    <th><%= t('Create Date') %></th>
     <th><%= t('Module Name') %></th>
     <th><%= t('Version') %></th>
     <th><%= t('Module Desp') %></th>
@@ -28,7 +28,7 @@
     <% else %>
         <td><%= r.id %></td>
     <% end %>
-    <td><%= prt(r, :submit_date).strftime('%Y/%m/%d') %></td>
+    <td><%= prt(r, :created_at).strftime('%Y/%m/%d') %></td>
   	<td><%= prt(r, :name) %></td>
   	<td><%= prt(r, :version) %></td> 
     <td><%= prt(r, :module_desp) %></td> 

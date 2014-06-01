@@ -3,7 +3,7 @@
   
 <% else %>
 <%= simple_form_for @module_info do |f| %>
-  <%= f.input :submit_date, :label => t('Submit Date'), :as => :string %>
+  <%#= f.input :submit_date, :label => t('Submit Date'), :as => :string %>
   <%= f.input :name, :label => t('Module Name') %>
   <%= f.input :version, :label => t('Version') %>
   <%= f.input :module_desp, :label => t('Module Desp'), :input_html => { :rows => 3} %>
