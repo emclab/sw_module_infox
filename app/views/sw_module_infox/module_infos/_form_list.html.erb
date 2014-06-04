@@ -3,7 +3,7 @@
   
 <% else %>
 <div class="pagination"><%= will_paginate models %></div>
-
+# of Engines=<%=models.count %>, Active=<%=models.where(active: true).count %>
 <table class="table table-striped">
   <tr>
     <th>#</th>
