@@ -84,14 +84,14 @@ describe "LinkTests" do
       page.should have_content('New Module Info')
       fill_in 'module_info_name', :with => 'a test bom'
       fill_in 'module_info_module_desp', :with => 'a test spec'
-      fill_in 'module_info_submit_date', :with => Date.today
+      #fill_in 'module_info_submit_date', :with => Date.today
       click_button 'Save'
       #save_and_open_page
       #with wrong data
       visit new_module_info_path
       fill_in 'module_info_name', :with => ''
       fill_in 'module_info_module_desp', :with => 'a test spec'
-      fill_in 'module_info_submit_date', :with => Date.today
+      #fill_in 'module_info_submit_date', :with => Date.today
       click_button 'Save'
       #save_and_open_page
       

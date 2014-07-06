@@ -3,8 +3,9 @@
   
 <% else %>
 <%= simple_form_for @module_info do |f| %>
-  <%= f.input :submit_date, :label => t('Submit Date'), :as => :string %>
+  <%#= f.input :submit_date, :label => t('Submit Date'), :as => :string %>
   <%= f.input :name, :label => t('Module Name') %>
+  <%= f.input :version, :label => t('Version') %>
   <%= f.input :module_desp, :label => t('Module Desp'), :input_html => { :rows => 3} %>
   <%= f.input :api_spec, :label => t('API Spec'), :input_html => { :rows => 3} %>
   <%= f.input :about_init, :label => t('About Initialize'), :input_html => { :rows => 3} %>

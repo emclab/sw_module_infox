@@ -18,9 +18,21 @@ module SwModuleInfox
     end
     
     it "should reject duplicate name" do
-      c0 = FactoryGirl.create(:sw_module_infox_module_info, :name => 'A name')
-      c = FactoryGirl.build(:sw_module_infox_module_info, :name => 'a name')
+      c0 = FactoryGirl.create(:sw_module_infox_module_info, :name => 'A name', :version => nil)
+      c = FactoryGirl.build(:sw_module_infox_module_info, :name => 'a name', :version => nil)
       c.should_not be_valid
+    end
+    
+    it "should reject same name if version exists and are same" do
+      c0 = FactoryGirl.create(:sw_module_infox_module_info, :name => 'A name', :version => 'nil')
+      c = FactoryGirl.build(:sw_module_infox_module_info, :name => 'a name', :version => 'nil')
+      c.should_not be_valid
+    end
+    
+    it "should take same name if version exists and are not the same" do
+      c0 = FactoryGirl.create(:sw_module_infox_module_info, :name => 'A name', :version => 'nilxxx')
+      c = FactoryGirl.build(:sw_module_infox_module_info, :name => 'a name', :version => 'nil')
+      c.should be_valid
     end
     
     it "should reject 0 category_id" do
