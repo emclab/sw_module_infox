@@ -18,7 +18,7 @@
     <th><%= t('Submitted By') %></th>
     <th><%= t('Last Updated By') %></th>
     <th></th>
- 
+    <th></th>
   </tr>
 
 <% models.each do |r| %>
@@ -38,6 +38,7 @@
     <td><%= r.active ? t('Yes') : t('No') %></td>
     <td><%= prt(r, 'submitted_by.name') %></td>
     <td><%= prt(r, 'last_updated_by.name') %></td>
+    <td><%= link_to t('Actions'), SUBURI + "/authentify/view_handler?index=1&url=#{module_actions_path(:module_info_id => r.id)}" , :class => BUTTONS_CLS['action'] if has_action_right?('index', 'sw_module_infox/module_actions' )  %></td>
     <td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_module_info_path(r)}" , :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r )  %></td>
     
   </tr>
