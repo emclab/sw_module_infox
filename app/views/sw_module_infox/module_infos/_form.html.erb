@@ -12,7 +12,7 @@
   <%= f.fields_for :data_resources, @module_info.data_resources.each do |builder| %>
     <p><%= render('data_resources', :f => builder) %></p>
   <% end %>
-  <p><%= link_to_add_fields t("Add Resrouce"), f, :data_resources %></p>
+  <p><%= link_to_add_fields t("Add Resource"), f, :data_resources %></p>
   <%= f.input :about_init, :label => t('About Initialize'), :input_html => { :rows => 3} %>
   <%= f.input :about_workflow, :label => t('About Workflow'), :input_html => { :rows => 3} %>
   <%= f.input :about_model, :label => t('About Model'), :input_html => { :rows => 3} %>
