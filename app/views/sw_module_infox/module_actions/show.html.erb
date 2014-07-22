@@ -1,0 +1,59 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>
+<div id="main_body">
+<h4><%= @title %></h4>
+
+<p>
+  <b><%= t('Module Name') %></b>
+  <%= @module_info.name %>
+</p>
+<p>
+    <b><%= t('Create Date') %></b>
+    <%= @module_action.created_at.strftime('%Y/%m/%/d') %>
+</p>
+<p>
+  <b><%= t('Action Name') %></b>
+  <%= @module_action.name %>
+</p>
+<p>
+  <b><%= t('Name-Non Tech') %></b>
+  <%= @module_action.name_non_tech %>
+</p>
+<p>
+  <b><%= t('Resource') %></b>
+  <%= @module_action.data_resource.name if @module_action.data_resource_id.present? %>
+</p>
+<p>
+  <b><%= t('Description') %></b>
+  <%= @module_action.desp %>
+</p>
+<p>
+  <b><%= t('Description-Non Tech') %></b>
+  <%= @module_action.desp_non_tech %>
+</p>
+
+<p>
+    <b><%= t('Present to Customer') %></b>
+    <%= @module_action.present_to_customer ? t('Yes') : t('No') %>
+</p>
+<p>
+  <b><%= t('Last Updated By') %></b>
+  <%= @module_action.last_updated_by.name if @module_action.last_updated_by_id.present? %>
+</p>
+
+<table class="table table-striped">
+  <tr>
+    <th>
+    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<%= link_to t('Delete'), module_action_path(@module_action), :method => :delete, :confirm => I18n.t('Delete the record?'), :class => BUTTONS_CLS['action'] if has_action_right?('destroy', params[:controller], @module_action) %>
+    </th>
+  </tr>
+</table>
+
+
+</div>
+
+<% end %>

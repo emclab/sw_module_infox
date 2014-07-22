@@ -26,6 +26,12 @@
   <%= @module_info.api_spec %>
 </p>
 <p>
+<%=t('Data Resources')%>
+<% @module_info.data_resources.each do |r| %>
+<li><%=r.name %></li>
+<% end %>
+</p>
+<p>
   <b><%= t('About Workflow') %></b>
   <%= @module_info.about_workflow %>
 </p>

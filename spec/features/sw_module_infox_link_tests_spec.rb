@@ -44,6 +44,19 @@ describe "LinkTests" do
       user_access = FactoryGirl.create(:user_access, :action => 'create_module_info', :resource => 'commonx_logs', :role_definition_id => @role.id, :rank => 1,
       :sql_code => "")
       
+      user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'sw_module_infox_module_actions',  :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "SwModuleInfox::ModuleAction.scoped.order('id DESC')")     
+        
+      user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "")
+      user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "")
+      user_access = FactoryGirl.create(:user_access, :action => 'show', :resource =>'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "record.last_updated_by_id == session[:user_id]")
+      user_access = FactoryGirl.create(:user_access, :action => 'destroy', :resource =>'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "record.last_updated_by_id == session[:user_id]")
+      
+      
       visit '/'
       #save_and_open_page
       fill_in "login", :with => @u.login
@@ -52,14 +65,15 @@ describe "LinkTests" do
     end
     it "works! (now write some real specs)" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :submit_date => 10.days.ago)
+      res = FactoryGirl.build(:sw_module_infox_data_resource)
+      qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :submit_date => 10.days.ago, :data_resources => [res])
         
       visit module_infos_path
-      save_and_open_page
+      #save_and_open_page
       page.should have_content('Module Infos')
       click_link 'Edit'
       page.should have_content('Edit Module Info')
-      save_and_open_page
+      #save_and_open_page
       fill_in 'module_info_name', :with => 'a test bom'
       click_button 'Save'
       #with wrong data
@@ -94,6 +108,63 @@ describe "LinkTests" do
       #fill_in 'module_info_submit_date', :with => Date.today
       click_button 'Save'
       #save_and_open_page
+      
+    end
+    
+    it "Works Module Actions" do
+      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
+      mod_info = FactoryGirl.create(:sw_module_infox_module_info)
+      resource = FactoryGirl.create(:sw_module_infox_data_resource, :name => 'data resource')
+      qs1 = FactoryGirl.create(:sw_module_infox_module_action, :last_updated_by_id => @u.id, :module_info_id => mod_info.id)
+        
+      visit module_actions_path
+      save_and_open_page
+      page.should have_content('Actions')
+      click_link 'Edit'
+      page.should have_content('Edit Action')
+      save_and_open_page
+      fill_in 'module_action_name', :with => 'a test bom with a tail'
+      click_button 'Save'
+      visit module_actions_path()
+      page.should have_content('a test bom with a tail')
+      #with wrong data
+      visit module_actions_path
+      #save_and_open_page
+      page.should have_content('Actions')
+      click_link 'Edit'
+      fill_in 'module_action_name', :with => 'a new new name'
+      select('', :from => 'module_action_data_resource_id')
+      click_button 'Save'
+      visit module_actions_path()
+      page.should_not have_content('a new new name')
+      
+      visit module_actions_path
+      click_link qs1.id.to_s
+      save_and_open_page
+      page.should have_content('Action Info')
+      #click_link 'New Log'
+      #save_and_open_page
+      #page.should have_content('Log')
+      
+      visit module_actions_path(module_info_id: mod_info.id)
+      save_and_open_page
+      click_link 'New Action'
+      page.should have_content('New Action')
+      fill_in 'module_action_name', :with => 'a test bom'
+      fill_in 'module_action_desp', :with => 'a test spec'
+      select('data resource', :from => 'module_action_data_resource_id')
+      click_button 'Save'
+      visit module_actions_path()
+      page.should have_content('a test bom')
+      #save_and_open_page
+      #with bad data
+      visit module_actions_path(module_info_id: mod_info.id)
+      click_link 'New Action'
+      fill_in 'module_action_name', :with => 'a strange name'
+      click_button 'Save'
+      visit module_actions_path()
+      page.should_not have_content('a strange name')
+      
       
     end
   end

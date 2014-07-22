@@ -28,8 +28,10 @@ module SwModuleInfox
         :sql_code => "SwModuleInfox::ModuleInfo.scoped.order('id')")  
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id)
-        qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id,  :name => 'newnew')
+        resource = FactoryGirl.build(:sw_module_infox_data_resource, :name => 'data resource new')
+        resource1 = FactoryGirl.build(:sw_module_infox_data_resource, :name => 'data resource')      
+        qs = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :data_resources => [resource])
+        qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id,  :name => 'newnew', :data_resources => [resource1])
         get 'index' , {:use_route => :sw_module_infox}
         assigns(:module_infos).should =~ [qs, qs1]       
       end
@@ -39,8 +41,10 @@ module SwModuleInfox
         :sql_code => "SwModuleInfox::ModuleInfo.scoped.order('id')")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :category_id => @cate.id)
-        qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :category_id => @cate.id + 1, :name => 'newnew')
+        resource = FactoryGirl.build(:sw_module_infox_data_resource, :name => 'data resource new')
+        resource1 = FactoryGirl.build(:sw_module_infox_data_resource, :name => 'data resource')      
+        qs = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :category_id => @cate.id, :data_resources => [resource])
+        qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :category_id => @cate.id + 1, :name => 'newnew', :data_resources => [resource1])
         get 'index' , {:use_route =>  :sw_module_infox, :category_id => @cate.id }
         assigns(:module_infos).should eq([qs])
       end
@@ -66,7 +70,8 @@ module SwModuleInfox
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.attributes_for(:sw_module_infox_module_info)
+        resource = FactoryGirl.attributes_for(:sw_module_infox_data_resource, :name => 'data resource new')
+        qs = FactoryGirl.attributes_for(:sw_module_infox_module_info, :data_resources_attributes => [resource])
         get 'create' , {:use_route => :sw_module_infox,  :module_info => qs}
         response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
       end
@@ -103,7 +108,8 @@ module SwModuleInfox
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.create(:sw_module_infox_module_info)
+        resource = FactoryGirl.build(:sw_module_infox_data_resource, :name => 'data resource new')
+        qs = FactoryGirl.create(:sw_module_infox_module_info, :data_resources => [resource])
         get 'update' , {:use_route => :sw_module_infox,  :id => qs.id, :module_info => {:name => 'newnew'}}
         response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       end
@@ -126,7 +132,8 @@ module SwModuleInfox
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.create(:sw_module_infox_module_info)
+        res = FactoryGirl.build(:sw_module_infox_data_resource)
+        qs = FactoryGirl.create(:sw_module_infox_module_info, :data_resources => [res])
         get 'show' , {:use_route => :sw_module_infox,  :id => qs.id}
         response.should be_success
       end

@@ -1,0 +1,6 @@
+<div class="fields">
+  <%= f.input :name, :label => t('Resource Name'), :required => true, :readonly => readonly?(@module_info, 'data_resource_name') %>
+  <%= f.input :name_non_tech, :label => t('Resource Name-Non Tech'), :readonly => readonly?(@module_info, 'data_resource_name_non_tech') %>
+  <%= f.input :brief_note, :label => t('Brief Note'), :readonly => readonly?(@module_info, 'data_resource_brief_note') %>
+  <%= link_to_remove_fields "Delete Resource", f %>
+</div>

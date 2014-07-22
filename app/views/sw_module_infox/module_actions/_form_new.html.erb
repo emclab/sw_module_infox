@@ -1,0 +1,25 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+<% else %>
+<h4><%=@title %></h4>
+	
+<%= simple_form_for @module_action do |f| %>
+
+  <%= f.input :module_info_name, :readonly => true, :label => t('Module Name'), :input_html => {:value => @module_info.name} %>
+  <%= f.input :module_info_id, :as => :hidden, :input_html => {:value => @module_info.id} %>
+  <%= f.input :name, :label => t('Action Name') %>
+  <%= f.input :name_non_tech, :label => t('Name-Non Tech') %>
+  <%= f.input :data_resource_id, :label => t('Resource'), :collection => SwModuleInfox::DataResource.scoped, :include_blank => true %>
+  <%= f.input :desp, :label => t('Description') %>
+  <%= f.input :desp_non_tech, :label => t('Desp-Non Tech') %>
+  <%= f.input :present_to_customer, :label => t('Present to Customer'), :as => :boolean %>
+  
+  
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>
+<% end %>
+
+<% end %>
+
+
