@@ -12,7 +12,7 @@
     <th><%= t('Create Date') %></th>
     <th><%= t('Action Name') %></th>
     <th><%= t('Resource') %></th>
-    <th><%= t('Non Tech Desp') %></th>
+    <th><%= t('Name-Non Tech') %></th>
     <th><%= t('Present To Customer') %></th>
     <th><%= t('Last Updated By') %></th>
     <th></th>
@@ -29,7 +29,7 @@
     <td><%= prt(r, :created_at).strftime('%Y/%m/%d') %></td>
   	<td><%= prt(r, :name) %></td>
   	<td><%= prt(r, 'data_resource.name') if r.data_resource_id.present? %></td> 
-    <td><%= prt(r, :desp_non_tech) %></td> 
+    <td><%= prt(r, :name_non_tech) %></td> 
     <td><%= r.present_to_customer ? t('Yes') : t('No') %></td>
     <td><%= prt(r, 'last_updated_by.name') %></td>
     <td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_module_action_path(r)}" , :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r )  %></td>
