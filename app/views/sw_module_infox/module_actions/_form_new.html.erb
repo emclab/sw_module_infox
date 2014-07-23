@@ -10,7 +10,7 @@
   <%= f.input :module_info_id, :as => :hidden, :input_html => {:value => @module_info.id} %>
   <%= f.input :name, :label => t('Action Name') %>
   <%= f.input :name_non_tech, :label => t('Name-Non Tech') %>
-  <%= f.input :data_resource_id, :label => t('Resource'), :required => true, :collection => SwModuleInfox::DataResource.scoped, :include_blank => true %>
+  <%= f.input :data_resource_id, :label => t('Resource'), :required => true, :collection => SwModuleInfox::DataResource.where(module_info_id: @module_info.id).order('name'), :include_blank => true %>
   <%= f.input :desp, :label => t('Description') %>
   <%= f.input :desp_non_tech, :label => t('Desp-Non Tech') %>
   <%= f.input :present_to_customer, :label => t('Present to Customer'), :as => :boolean %>
