@@ -2,8 +2,8 @@ require_dependency "sw_module_infox/application_controller"
 
 module SwModuleInfox
   class ModuleActionsController < ApplicationController
-    before_filter :require_employee
-    before_filter :load_parent_record
+    before_action :require_employee
+    before_action :load_parent_record
 
     def index
       @title = t('Actions')
