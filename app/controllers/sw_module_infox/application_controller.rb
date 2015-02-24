@@ -1,5 +1,5 @@
 module SwModuleInfox
-  class ApplicationController < ActionController::Base  #ApplicationController
+  class ApplicationController < ::ApplicationController
     include Authentify::SessionsHelper
     include Authentify::AuthentifyUtility
     include Authentify::UsersHelper

@@ -33,7 +33,7 @@ module Dummy
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be actioned from the log file.
-    config.action_parameters += [:password]
+    config.filter_parameters += [:password]
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true

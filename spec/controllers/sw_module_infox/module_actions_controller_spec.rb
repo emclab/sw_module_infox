@@ -1,10 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module SwModuleInfox
-  describe ModuleActionsController do
+  RSpec.describe ModuleActionsController, type: :controller do
+    routes {SwModuleInfox::Engine.routes}
     before(:each) do
-      controller.should_receive(:require_signin)
-      controller.should_receive(:require_employee)
+      expect(controller).to receive(:require_signin)
+      expect(controller).to receive(:require_employee)
     end
     before(:each) do
       @pagination_config = FactoryGirl.create(:engine_config, :engine_name => nil, :engine_version => nil, :argument_name => 'pagination', :argument_value => 30)
@@ -25,24 +26,24 @@ module SwModuleInfox
     describe "GET 'index'" do
       it "returns all actions" do
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "SwModuleInfox::ModuleAction.scoped.order('id')")  
+        :sql_code => "SwModuleInfox::ModuleAction.all.order('id')")  
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action, :last_updated_by_id => @u.id)
         qs1 = FactoryGirl.create(:sw_module_infox_module_action, :last_updated_by_id => @u.id,  :name => 'newnew')
-        get 'index' , {:use_route => :sw_module_infox}
-        assigns(:module_actions).should =~ [qs, qs1]       
+        get 'index' 
+        expect(assigns(:module_actions)).to match_array([qs, qs1])       
       end
       
       it "should return actions for module info" do
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "SwModuleInfox::ModuleAction.scoped.order('id')")        
+        :sql_code => "SwModuleInfox::ModuleAction.all.order('id')")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action, :last_updated_by_id => @u.id, :module_info_id => @mod_info.id)
         qs1 = FactoryGirl.create(:sw_module_infox_module_action, :last_updated_by_id => @u.id, :module_info_id => @mod_info.id + 1, :name => 'newnew')
-        get 'index' , {:use_route =>  :sw_module_infox, :module_info_id => @mod_info.id }
-        assigns(:module_actions).should eq([qs])
+        get 'index' , {:module_info_id => @mod_info.id }
+        expect(assigns(:module_actions)).to match_array([qs])
       end
       
     end
@@ -54,8 +55,8 @@ module SwModuleInfox
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        get 'new' , {:use_route => :sw_module_infox, :module_info_id => @mod_info.id}
-        response.should be_success
+        get 'new' , { :module_info_id => @mod_info.id}
+        expect(response).to be_success
       end
            
     end
@@ -67,8 +68,8 @@ module SwModuleInfox
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:sw_module_infox_module_action)
-        get 'create' , {:use_route => :sw_module_infox, :module_action => qs, :module_info_id => @mod_info.id}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        get 'create' , { :module_action => qs, :module_info_id => @mod_info.id}
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
       end
       
       it "should render 'new' if data error" do
@@ -77,8 +78,8 @@ module SwModuleInfox
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:sw_module_infox_module_action, :name => nil)
-        get 'create' , {:use_route => :sw_module_infox,  :module_action => qs, :module_info_id => @mod_info.id}
-        response.should render_template("new")
+        get 'create' , {  :module_action => qs, :module_info_id => @mod_info.id}
+        expect(response).to render_template("new")
       end
     end
   
@@ -90,8 +91,8 @@ module SwModuleInfox
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action)
-        get 'edit' , {:use_route => :sw_module_infox,  :id => qs.id}
-        response.should be_success
+        get 'edit' , {  :id => qs.id}
+        expect(response).to be_success
       end
       
     end
@@ -104,8 +105,8 @@ module SwModuleInfox
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action)
-        get 'update' , {:use_route => :sw_module_infox,  :id => qs.id, :module_action => {:name => 'newnew'}}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        get 'update' , {  :id => qs.id, :module_action => {:name => 'newnew'}}
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       end
       
       it "should render 'new' if data error" do
@@ -114,8 +115,8 @@ module SwModuleInfox
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action)
-        get 'update' , {:use_route => :sw_module_infox,  :id => qs.id, :module_action => {:name => nil} }
-        response.should render_template("edit")
+        get 'update' , {  :id => qs.id, :module_action => {:name => nil} }
+        expect(response).to render_template("edit")
       end
     end
   
@@ -128,8 +129,8 @@ module SwModuleInfox
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         res = FactoryGirl.create(:sw_module_infox_data_resource)
         qs = FactoryGirl.create(:sw_module_infox_module_action, :data_resource_id => res.id)
-        get 'show' , {:use_route => :sw_module_infox,  :id => qs.id}
-        response.should be_success
+        get 'show' , {  :id => qs.id}
+        expect(response).to be_success
       end
     end
     
@@ -140,8 +141,8 @@ module SwModuleInfox
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action)
-        get 'destroy' , {:use_route => :sw_module_infox,  :id => qs.id, :method => :delete}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+        get 'destroy' , {  :id => qs.id, :method => :delete}
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
       end
     end
   end

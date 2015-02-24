@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe "LinkTests" do
+RSpec.describe "LinkTests", type: :request do
   describe "GET /sw_module_infox_link_tests" do
     mini_btn = 'btn btn-mini '
     ActionView::CompiledTemplates::BUTTONS_CLS =
@@ -33,7 +33,7 @@ describe "LinkTests" do
       @cate = FactoryGirl.create(:commonx_misc_definition, :for_which => 'module_category')
       
       user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'sw_module_infox_module_infos',  :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "SwModuleInfox::ModuleInfo.scoped.order('id DESC')")     
+        :sql_code => "SwModuleInfox::ModuleInfo.all.order('id DESC')")     
         
       user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'sw_module_infox_module_infos', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
@@ -45,7 +45,7 @@ describe "LinkTests" do
       :sql_code => "")
       
       user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'sw_module_infox_module_actions',  :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "SwModuleInfox::ModuleAction.scoped.order('id DESC')")     
+        :sql_code => "SwModuleInfox::ModuleAction.all.order('id DESC')")     
         
       user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'sw_module_infox_module_actions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
@@ -68,41 +68,41 @@ describe "LinkTests" do
       res = FactoryGirl.build(:sw_module_infox_data_resource)
       qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :submit_date => 10.days.ago, :data_resources => [res])
         
-      visit module_infos_path
+      visit sw_module_infox.module_infos_path
       #save_and_open_page
-      page.should have_content('Module Infos')
+      expect(page).to have_content('Module Infos')
       click_link 'Edit'
-      page.should have_content('Edit Module Info')
+      expect(page).to have_content('Edit Module Info')
       #save_and_open_page
       fill_in 'module_info_name', :with => 'a test bom'
       click_button 'Save'
       #with wrong data
-      visit module_infos_path
+      visit sw_module_infox.module_infos_path
       #save_and_open_page
-      page.should have_content('Module Infos')
+      expect(page).to have_content('Module Infos')
       click_link 'Edit'
       fill_in 'module_info_module_desp', :with => ''
       click_button 'Save'
       save_and_open_page
       
-      visit module_infos_path
+      visit sw_module_infox.module_infos_path
       click_link qs1.id.to_s
       save_and_open_page
-      page.should have_content('Module Info')
+      expect(page).to have_content('Module Info')
       click_link 'New Log'
       save_and_open_page
-      page.should have_content('Log')
+      expect(page).to have_content('Log')
       
-      visit new_module_info_path()
+      visit sw_module_infox.new_module_info_path()
       save_and_open_page
-      page.should have_content('New Module Info')
+      expect(page).to have_content('New Module Info')
       fill_in 'module_info_name', :with => 'a test bom'
       fill_in 'module_info_module_desp', :with => 'a test spec'
       #fill_in 'module_info_submit_date', :with => Date.today
       click_button 'Save'
       #save_and_open_page
       #with wrong data
-      visit new_module_info_path
+      visit sw_module_infox.new_module_info_path
       fill_in 'module_info_name', :with => ''
       fill_in 'module_info_module_desp', :with => 'a test spec'
       #fill_in 'module_info_submit_date', :with => Date.today
@@ -117,53 +117,53 @@ describe "LinkTests" do
       resource = FactoryGirl.create(:sw_module_infox_data_resource, :name => 'data resource')
       qs1 = FactoryGirl.create(:sw_module_infox_module_action, :last_updated_by_id => @u.id, :module_info_id => mod_info.id)
         
-      visit module_actions_path
-      save_and_open_page
-      page.should have_content('Actions')
+      visit sw_module_infox.module_actions_path
+      #save_and_open_page
+      expect(page).to have_content('Actions')
       click_link 'Edit'
-      page.should have_content('Edit Action')
-      save_and_open_page
+      expect(page).to have_content('Edit Action')
+      #save_and_open_page
       fill_in 'module_action_name', :with => 'a test bom with a tail'
       click_button 'Save'
-      visit module_actions_path()
-      page.should have_content('a test bom with a tail')
+      visit sw_module_infox.module_actions_path()
+      expect(page).to have_content('a test bom with a tail')
       #with wrong data
-      visit module_actions_path
+      visit sw_module_infox.module_actions_path
       #save_and_open_page
-      page.should have_content('Actions')
+      expect(page).to have_content('Actions')
       click_link 'Edit'
       fill_in 'module_action_name', :with => 'a new new name'
       select('', :from => 'module_action_data_resource_id')
       click_button 'Save'
-      visit module_actions_path()
-      page.should_not have_content('a new new name')
+      visit sw_module_infox.module_actions_path()
+      expect(page).not_to have_content('a new new name')
       
-      visit module_actions_path
+      visit sw_module_infox.module_actions_path
       click_link qs1.id.to_s
       save_and_open_page
-      page.should have_content('Action Info')
+      expect(page).to have_content('Action Info')
       #click_link 'New Log'
       #save_and_open_page
-      #page.should have_content('Log')
+      #expect(page).to have_content('Log')
       
-      visit module_actions_path(module_info_id: mod_info.id)
+      visit sw_module_infox.module_actions_path(module_info_id: mod_info.id)
       save_and_open_page
       click_link 'New Action'
-      page.should have_content('New Action')
+      expect(page).to have_content('New Action')
       fill_in 'module_action_name', :with => 'a test bom'
       fill_in 'module_action_desp', :with => 'a test spec'
       select('data resource', :from => 'module_action_data_resource_id')
       click_button 'Save'
-      visit module_actions_path()
-      page.should have_content('a test bom')
+      visit sw_module_infox.module_actions_path()
+      expect(page).to have_content('a test bom')
       #save_and_open_page
       #with bad data
-      visit module_actions_path(module_info_id: mod_info.id)
+      visit sw_module_infox.module_actions_path(module_info_id: mod_info.id)
       click_link 'New Action'
       fill_in 'module_action_name', :with => 'a strange name'
       click_button 'Save'
-      visit module_actions_path()
-      page.should_not have_content('a strange name')
+      visit sw_module_infox.module_actions_path()
+      expect(page).not_to have_content('a strange name')
       
       
     end

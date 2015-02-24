@@ -7,11 +7,11 @@ Rails.application.routes.draw do
   #mount StateMachineLogx::Engine => '/sm_log'
   #mount BizWorkflowx::Engine => '/biz_wf'
   
-  resource :session
+  #resource :session
   
-  root :to => "sessions#new", controller: :authentify
-  get '/signin',  :to => 'sessions#new', controller: :authentify
-  get '/signout', :to => 'asessions#destroy', controller: :authentify
-  get '/user_menus', :to => 'user_menus#index', controller: :main_app
-  get '/view_handler', :to => 'application#view_handler', controller: :authentify
+  root :to => "authentify/sessions#new"
+  get '/signin',  :to => 'authentify/sessions#new'
+  get '/signout', :to => 'authentify/asessions#destroy'
+  get '/user_menus', :to => 'user_menus#index'
+  get '/view_handler', :to => 'authentify/application#view_handler'
 end
