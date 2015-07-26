@@ -19,6 +19,7 @@ module SwModuleInfox
       
       @mod_info = FactoryGirl.create(:sw_module_infox_module_info)
       
+      session[:user_role_ids] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id).user_role_ids
     end
       
     render_views
@@ -69,7 +70,7 @@ module SwModuleInfox
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:sw_module_infox_module_action)
         get 'create' , { :module_action => qs, :module_info_id => @mod_info.id}
-        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Saved!")
       end
       
       it "should render 'new' if data error" do
@@ -106,7 +107,7 @@ module SwModuleInfox
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action)
         get 'update' , {  :id => qs.id, :module_action => {:name => 'newnew'}}
-        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Updated!")
       end
       
       it "should render 'new' if data error" do
@@ -142,7 +143,7 @@ module SwModuleInfox
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:sw_module_infox_module_action)
         get 'destroy' , {  :id => qs.id, :method => :delete}
-        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Deleted!")
       end
     end
   end

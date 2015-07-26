@@ -21,10 +21,10 @@ module SwModuleInfox
 
 
     def create
-      @module_action = SwModuleInfox::ModuleAction.new(params[:module_action], :as => :role_new)
+      @module_action = SwModuleInfox::ModuleAction.new(new_params)
       @module_action.last_updated_by_id = session[:user_id]
       if @module_action.save
-        redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Saved!")
       else
         flash[:notice] = t('Data Error. Not Saved!')
         @erb_code = find_config_const('module_action_new_view', 'sw_module_infox')
@@ -42,8 +42,8 @@ module SwModuleInfox
     def update
         @module_action = SwModuleInfox::ModuleAction.find_by_id(params[:id])
         @module_action.last_updated_by_id = session[:user_id]
-        if @module_action.update_attributes(params[:module_action], :as => :role_update)
-          redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        if @module_action.update_attributes(edit_params)
+          redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Updated!")
         else
           flash[:notice] = t('Data Error. Not Updated!')
           @erb_code = find_config_const('module_action_edit_view', 'sw_module_infox')
@@ -59,7 +59,7 @@ module SwModuleInfox
     
     def destroy
       SwModuleInfox::ModuleAction.delete(params[:id].to_i)
-      redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+      redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Deleted!")
     end
     
     protected
@@ -67,6 +67,15 @@ module SwModuleInfox
       @module_info = SwModuleInfox::ModuleInfo.find_by_id(params[:module_info_id]) if params[:module_info_id].present?
       @module_info = SwModuleInfox::ModuleInfo.find_by_id(SwModuleInfox::ModuleAction.find_by_id(params[:id]).module_info_id) if params[:id].present?
     end
-  
+    
+    private
+    
+    def new_params
+      params.require(:module_action).permit(:name, :name_non_tech, :desp, :desp_non_tech, :last_updated_by_id, :module_info_id, :present_to_customer, :data_resource_id)
+    end
+    
+    def edit_params
+      params.require(:module_action).permit(:name, :name_non_tech, :desp, :desp_non_tech, :module_info_id, :present_to_customer, :data_resource_id)
+    end
   end
 end
