@@ -21,7 +21,7 @@ module SwModuleInfox
 
 
     def create
-      @module_info = SwModuleInfox::ModuleInfo.new(params[:module_info], :as => :role_new)
+      @module_info = SwModuleInfox::ModuleInfo.new(new_params)
       @module_info.submitted_by_id = session[:user_id]
       @module_info.last_updated_by_id = session[:user_id]
       if @module_info.save
@@ -43,7 +43,7 @@ module SwModuleInfox
     def update
         @module_info = SwModuleInfox::ModuleInfo.find_by_id(params[:id])
         @module_info.last_updated_by_id = session[:user_id]
-        if @module_info.update_attributes(params[:module_info], :as => :role_update)
+        if @module_info.update_attributes(edit_params)
           redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Updated!")
         else
           flash[:notice] = t('Data Error. Not Updated!')
@@ -63,6 +63,18 @@ module SwModuleInfox
       @category = Commonx::MiscDefinition.find_by_id(params[:category_id]) if params[:category_id].present?
       sw_mod = SwModuleInfox::ModuleInfo.find_by_id(params[:id]) if params[:id].present?
       @category = Commonx::MiscDefinition.find_by_id(sw_mod.category_id) if sw_mod
+    end
+    
+    private
+    def new_params
+      params.require(:module_info).permit(:api_spec, :about_controller, :about_init, :about_log, :about_model, :about_onboard_data, :about_subaction, :about_view, :about_workflow, 
+                    :category_id, :active, :module_desp, :name, :submit_date, :wf_state, :about_misc_def, :last_updated_by_id, :submitted_by_id,:version,
+                    data_resources_attributes: [:id, :_destroy, :brief_note, :module_info_id, :name, :name_non_tech])
+    end
+    
+    def edit_params
+      params.require(:module_info).permit(:api_spec, :about_controller, :about_init, :about_log, :about_model, :about_onboard_data, :about_subaction, :about_view, :about_workflow, 
+                    :category_id, :active, :module_desp, :name, :submit_date, :wf_state, :about_misc_def, :version, data_resources_attributes: [:id, :_destroy, :brief_note, :name, :name_non_tech])
     end
   end
 end
