@@ -45,7 +45,7 @@ module SwModuleInfox
         resource1 = FactoryGirl.build(:sw_module_infox_data_resource, :name => 'data resource')      
         qs = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :category_id => @cate.id, :data_resources => [resource])
         qs1 = FactoryGirl.create(:sw_module_infox_module_info, :last_updated_by_id => @u.id, :category_id => @cate.id + 1, :name => 'newnew', :data_resources => [resource1])
-        get 'index' , {:use_route =>  :sw_module_infox, :category_id => @cate.id }
+        get 'index' , { :category_id => @cate.id }
         expect(assigns(:module_infos)).to match_array([qs])
       end
       
