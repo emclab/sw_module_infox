@@ -9,7 +9,7 @@ module SwModuleInfox
       @title = t('Actions')
       @module_actions =  params[:sw_module_infox_module_actions][:model_ar_r]
       @module_actions = @module_actions.where(:module_info_id => @module_info.id) if @module_info
-      @module_actions = @module_actions.page((params[:page].to_i > @module_actions.count/@max_pagination.to_i) ? 1 : params[:page]).per_page(@max_pagination)
+      @module_actions = @module_actions.page((params[:page].to_i > 1 + @module_actions.count/@max_pagination.to_i) ? 1 : params[:page]).per_page(@max_pagination)
       @erb_code = find_config_const('module_action_index_view', 'sw_module_infox')
     end
 
