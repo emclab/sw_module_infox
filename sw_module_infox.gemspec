@@ -7,11 +7,11 @@ require "sw_module_infox/version"
 Gem::Specification.new do |s|
   s.name        = "sw_module_infox"
   s.version     = SwModuleInfox::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of SwModuleInfox."
-  s.description = "TODO: Description of SwModuleInfox."
+  s.authors     = ["Your name"]
+  s.email       = ["Your@email.com"]
+  s.homepage    = "http://home.com"
+  s.summary     = "Summary of SwModuleInfox."
+  s.description = "Description of SwModuleInfox."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
