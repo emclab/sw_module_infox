@@ -1,3 +1,3 @@
 module SwModuleInfox
-  VERSION = "04"
+  VERSION = "05"
 end
